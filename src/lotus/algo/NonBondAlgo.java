@@ -22,7 +22,7 @@ public class NonBondAlgo {
         }
         double average = total / counter;
         while (it2.hasNext()) {
-            int curVal = it.next();
+            int curVal = it2.next();
             if (Math.abs(average - curVal) >= 20) {
                 return false;
             }
@@ -43,7 +43,7 @@ public class NonBondAlgo {
         }
         double average = total / counter;
         while (it2.hasNext()) {
-            int curVal = it.next();
+            int curVal = it2.next();
             if (Math.abs(average - curVal) >= 20) {
                 return false;
             }
@@ -68,7 +68,7 @@ public class NonBondAlgo {
         double counter1 = 0;
         while (it2.hasNext()) {
             counter1++;
-            int curVal = it.next();
+            int curVal = it2.next();
             total1 = total1 + curVal;
 
         }

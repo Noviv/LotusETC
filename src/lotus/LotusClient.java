@@ -19,8 +19,8 @@ public class LotusClient {
     private PrintWriter to_exch;
 
     //market data
+    private final ArrayList<Symbol> activeSymbols;
     private int orderID;
-    private ArrayList<Symbol> activeSymbols;
 
     public LotusClient() throws Exception {
         exch = new Socket("test-exch-lotus", 20000);
@@ -31,6 +31,7 @@ public class LotusClient {
         orderID = 0;
         activeSymbols = new ArrayList<>();
         activeSymbols.add(Bond.getInstance());
+        activeSymbols.add(Valbz.getInstance());
 
         command("HELLO", "LOTUS");
     }
@@ -55,38 +56,52 @@ public class LotusClient {
     }
 
     public final void run() {
-        try {
-            while (true) {
-                process(from_exch.readLine().trim());
-
-                for (Symbol s : activeSymbols) {
-                    s.calc(this);
-                }
+        while (true) {
+            String line = null;
+            try {
+                line = from_exch.readLine().trim();
+                process(line);
+            } catch (Exception e) {
+                System.err.println("Error in LotusClient.run: " + e.getMessage());
+                e.printStackTrace();
             }
-        } catch (Exception e) {
-            System.out.println("Error in LotusClient.run: " + e.getMessage());
+
+            for (Symbol s : activeSymbols) {
+                s.calc(this);
+            }
         }
     }
 
     private void process(String line) {
         String[] comps = line.split(" ");
 
-        Symbol s = null;
-        boolean book = false;
-
-        if (comps[1].equals("BOND")) {
-            s = Bond.getInstance();
-        } else if (comps[1].equals("VALBZ")) {
-            s = Valbz.getInstance();
-        }
+        Symbol s;
+        boolean book;
 
         switch (comps[0]) {
             case "BOOK":
-                Bond.getInstance().appendBook(comps);
+                book = true;
                 break;
             case "TRADE":
-                Bond.getInstance().appendTrade(comps[2], comps[3]);
+                book = false;
                 break;
+            default:
+                return;
+        }
+
+        switch (comps[1]) {
+            case "BOND":
+                s = Bond.getInstance();
+                break;
+            case "VALBZ":
+                s = Valbz.getInstance();
+                break;
+            default:
+                s = null;
+        }
+
+        if (s == null) {
+            return;
         }
 
         process0(s, book, comps);
@@ -106,7 +121,14 @@ public class LotusClient {
                 LotusClient client = new LotusClient();
                 client.run();
             } catch (Exception e) {
-                System.out.println("LotusClient crashed! Restarting...");
+                System.out.println("LotusClient crashed: " + e.getMessage());
+                e.printStackTrace();
+                System.out.println("\tRestarting...");
+                try {
+                    System.gc();
+                    Thread.sleep(1000);
+                } catch (InterruptedException ex) {
+                }
             }
         }
     }

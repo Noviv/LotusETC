@@ -30,17 +30,20 @@ public abstract class Symbol {
         boolean buyOrder = true;
         String[] pricePair;
         for (int i = 2; i < comps.length; i++) {
-            if (comps[i].equals("BUY")) {
-                buyOrder = true;
-            } else if (comps[i].equals("SELL")) {
-                buyOrder = false;
-            } else {
-                pricePair = comps[i].split(":");
-                if (buyOrder) {
-                    bookBuyPairs.put(Integer.parseInt(pricePair[0]), Integer.parseInt(pricePair[1]));
-                } else {
-                    bookSellPairs.put(Integer.parseInt(pricePair[0]), Integer.parseInt(pricePair[1]));
-                }
+            switch (comps[i]) {
+                case "BUY":
+                    buyOrder = true;
+                    break;
+                case "SELL":
+                    buyOrder = false;
+                    break;
+                default:
+                    pricePair = comps[i].split(":");
+                    if (buyOrder) {
+                        bookBuyPairs.put(Integer.parseInt(pricePair[0]), Integer.parseInt(pricePair[1]));
+                    } else {
+                        bookSellPairs.put(Integer.parseInt(pricePair[0]), Integer.parseInt(pricePair[1]));
+                    }
             }
         }
     }
