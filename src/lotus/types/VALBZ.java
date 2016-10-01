@@ -4,11 +4,11 @@ import lotus.Stocks;
 
 import static lotus.algo.NonBondAlgo.*;
 
-public class Valbz extends Symbol {
+public class VALBZ extends Symbol {
 
-    private static Valbz instance;
+    private static VALBZ instance;
 
-    public Valbz() {
+    public VALBZ() {
         super("VALBZ");
     }
 
@@ -17,7 +17,7 @@ public class Valbz extends Symbol {
         Stocks.setVALBZ(getMarketVal());
     }
 
-    public static Valbz getInstance() {
-        return instance == null ? instance = new Valbz() : instance;
+    public static VALBZ getInstance() {
+        return instance == null ? instance = new VALBZ() : instance;
     }
 }

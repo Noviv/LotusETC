@@ -15,18 +15,18 @@ public class Bond extends Symbol {
 
     @Override
     public void calc(LotusClient client) {
-        if (System.currentTimeMillis() - lastMillis > 5 * 1000 && traded) {
+        if (System.currentTimeMillis() - lastMillis > 1 * 1000 && traded) {
             traded = false;
             lastMillis = System.currentTimeMillis();
 
             findHighestBid(getCurrentBuyPrices());
             if (checkingForBuyPrice()) {
-                client.add(this, DirType.BUY, getBuyVal(), 1);
+                client.add(this, DirType.BUY, getBuyVal(), 10);
             }
 
             findLowestBid(getCurrentSellPrices());
             if (checkingForSellPrice()) {
-                client.add(this, DirType.SELL, getSellVal(), 1);
+                client.add(this, DirType.SELL, getSellVal(), 10);
             }
         }
     }

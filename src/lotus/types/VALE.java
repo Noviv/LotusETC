@@ -6,11 +6,11 @@ import lotus.Stocks;
 import static lotus.algo.NonBondAlgo.*;
 import lotus.util.DirType;
 
-public class Vale extends Symbol {
+public class VALE extends Symbol {
 
-    private static Vale instance;
+    private static VALE instance;
 
-    public Vale() {
+    public VALE() {
         super("VALE");
     }
 
@@ -19,8 +19,8 @@ public class Vale extends Symbol {
         Stocks.setVALE(getMarketVal());
     }
 
-    public static Vale getInstance() {
-        return instance == null ? instance = new Vale() : instance;
+    public static VALE getInstance() {
+        return instance == null ? instance = new VALE() : instance;
     }
 
 }

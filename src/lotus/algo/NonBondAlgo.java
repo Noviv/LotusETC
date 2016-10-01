@@ -53,27 +53,22 @@ public class NonBondAlgo {
 
     public static void getAverageFairValue(ArrayList<Integer> allBuyOrders, ArrayList<Integer> allSellOrders) {
         Iterator<Integer> it = allBuyOrders.iterator();
-        double total = 0;
-        double counter = 0;
+        int upperLimit = Integer.MIN_VALUE;
         while (it.hasNext()) {
-            counter++;
-            int curVal = it.next();
-            total = total + curVal;
-
+            int x = it.next();
+            if (x > upperLimit) {
+                upperLimit = x;
+            }
         }
-        double average = total / counter;
-
         Iterator<Integer> it2 = allSellOrders.iterator();
-        double total1 = 0;
-        double counter1 = 0;
+        int lowerLimit = Integer.MAX_VALUE;
         while (it2.hasNext()) {
-            counter1++;
-            int curVal = it2.next();
-            total1 = total1 + curVal;
-
+            int x = it2.next();
+            if (x < lowerLimit) {
+                lowerLimit = x;
+            }
         }
-        double average1 = total1 / counter1;
-        int AverageFairValue = (int) (average + average1) / 2;
+        int AverageFairValue = (lowerLimit + upperLimit) / 2;
         marketVal = AverageFairValue;
     }
 
@@ -89,7 +84,7 @@ public class NonBondAlgo {
                 maxVal = curVal;
             }
         }
-        highestBuyVal = maxVal - 1;
+        highestBuyVal = maxVal;
     }
 
     //algorithm for checking for the lowest sell bid currently
@@ -104,7 +99,7 @@ public class NonBondAlgo {
                 minVal = curVal;
             }
         }
-        lowestSellVal = minVal + 1;
+        lowestSellVal = minVal;
     }
 
     //finds if the highest Buy price is less than the marketVal

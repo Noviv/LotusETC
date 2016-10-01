@@ -9,8 +9,8 @@ import lotus.types.Bond;
 import lotus.types.GS;
 import lotus.types.MS;
 import lotus.types.Symbol;
-import lotus.types.Valbz;
-import lotus.types.Vale;
+import lotus.types.VALBZ;
+import lotus.types.VALE;
 import lotus.types.WFC;
 import lotus.types.XLF;
 import lotus.util.DirType;
@@ -36,8 +36,8 @@ public class LotusClient {
         orderID = 0;
         activeSymbols = new ArrayList<>();
         activeSymbols.add(Bond.getInstance());
-        activeSymbols.add(Valbz.getInstance());
-        activeSymbols.add(Vale.getInstance());
+        activeSymbols.add(VALBZ.getInstance());
+        activeSymbols.add(VALE.getInstance());
         activeSymbols.add(GS.getInstance());
         activeSymbols.add(MS.getInstance());
         activeSymbols.add(WFC.getInstance());
@@ -125,20 +125,13 @@ public class LotusClient {
     }
 
     public static void main(String[] args) {
-        while (true) {
-            try {
-                LotusClient client = new LotusClient();
-                client.run();
-            } catch (Exception e) {
-                System.out.println("LotusClient crashed: " + e.getMessage());
-                e.printStackTrace();
-                System.out.println("\tRestarting...");
-                try {
-                    System.gc();
-                    Thread.sleep(1000);
-                } catch (InterruptedException ex) {
-                }
-            }
+        try {
+            LotusClient client = new LotusClient();
+            client.run();
+        } catch (Exception e) {
+            System.out.println("LotusClient crashed: " + e.getMessage());
+            e.printStackTrace();
+            System.out.println("\tRestarting...");
         }
     }
 }

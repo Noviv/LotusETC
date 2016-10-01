@@ -101,7 +101,7 @@ public abstract class Symbol {
     protected abstract void updateAverages0();
 
     public void calc(LotusClient client) {
-        if (System.currentTimeMillis() - lastMillis > 5 * 1000 && traded) {
+        if (System.currentTimeMillis() - lastMillis > 1 * 1000 && traded) {
             traded = false;
             lastMillis = System.currentTimeMillis();
 
