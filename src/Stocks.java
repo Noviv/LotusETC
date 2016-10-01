@@ -2,6 +2,14 @@
 public class Stocks
 {
   public final int BONDPRICE = 1000;
+  public final int XLFfee = 100;
+  public final int VALBZfee = 10;
+  public int VALBZprice;
+  public int VALEprice;
+  public int GSprice;
+  public int MSprice;
+  public int WFCprice;
+  public int XLFprice;
   public int BONDamt;
   public int VALBZamt;
   public int VALEamt;
@@ -20,8 +28,31 @@ public class Stocks
     this.WFCamt = WFC;
     this.XLFamt = XLF;
   }
-
-  public int getBONDAmt()
+  public void setVALBZ(int price)
+  {
+	  this.VALBZprice = price;
+  }
+  public void setVALE(int price)
+  {
+	  this.VALEprice = price;
+  }
+  public void setGS(int price)
+  {
+	  this.GSprice = price;
+  }
+  public void setMS(int price)
+  {
+	  this.MSprice = price;
+  }
+  public void setWFC(int price)
+  {
+	  this.WFCprice = price;
+  }
+  public void setXLF(int price)
+  {
+	  this.XLFprice = price;
+  }
+  public int getBONDamt()
   {
     return this.BONDamt;
   }
@@ -50,5 +81,31 @@ public class Stocks
   public int getXLFamt()
   {
     return this.XLFamt;
+  }
+  public boolean worthItToConvertXLF()
+  {
+    int totVal = 0;
+    if (this.getBONDamt()>=30&&this.getGSamt()>=20&&this.getMSamt()>=30 && this.getWFCamt()>=20)
+    {
+      totVal = 30*this.BONDPRICE + 20*this.GSprice + 30*this.MSprice + 20*this.WFCprice + XLFfee;
+      if (totVal<this.XLFprice)
+      {
+        return true;
+      }
+    }
+    return false;
+  }
+  public boolean worthItToConvertVALE()
+  {
+    int totVal = 0;
+    if(this.getVALBZamt()>=0||this.getVALEamt()>=0)
+    {
+      totVal =this.VALBZprice+VALBZfee;
+      if(totVal<VALEprice)
+      {
+        return true;
+      }
+    }
+    return false;
   }
 }
