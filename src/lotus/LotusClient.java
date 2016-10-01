@@ -4,12 +4,17 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import lotus.types.Bond;
 
 public class LotusClient {
 
+    //networking variables
     private Socket exch;
     private BufferedReader from_exch;
     private PrintWriter to_exch;
+
+    //market data
+    private Bond bondData;
 
     public LotusClient() {
         try {
@@ -30,6 +35,8 @@ public class LotusClient {
             System.err.println("Error in LotusClient handshake: " + e.getMessage());
             System.exit(0);
         }
+
+        bondData = Bond.getInstance();
     }
 
     public void command(String cmd) {
@@ -40,23 +47,49 @@ public class LotusClient {
             System.out.println("Exchange reply: " + reply);
             System.out.println();
         } catch (Exception e) {
-            System.out.println("Error in test: " + e.getMessage());
+            System.out.println("Error in LotusClient.command: " + e.getMessage());
         }
     }
 
-    public void test() {
-        int i = 0;
-        while (i++ < 10) {
-            try {
-                System.out.println(from_exch.readLine().trim());
-                Thread.sleep(500);
-            } catch (Exception e) {
+    public void run() {
+        long lastMillis = System.currentTimeMillis();
+        boolean traded = false;
+
+        try {
+            String line;
+            String comps[];
+            while (true) {
+                line = from_exch.readLine().trim();
+                comps = line.split(" ");
+                if (comps[1].equals("BOND")) {
+                    if (comps[0].equals("BOOK")) {
+                        bondData.appendBook(comps);
+                    } else if (comps[0].equals("TRADE")) {
+                        bondData.appendTrade(comps[2], comps[3]);
+                        traded = true;
+                    }
+                }
+
+                if (System.currentTimeMillis() - lastMillis > 5 * 1000 && traded) {
+                    traded = false;
+                    lastMillis = System.currentTimeMillis();
+                    System.out.println("running algorithm on this data:");
+                    Bond.getInstance().print();
+                }
             }
+        } catch (Exception e) {
+            System.out.println("Error in LotusClient.run: " + e.getMessage());
         }
     }
 
     public static void main(String[] args) {
-        LotusClient client = new LotusClient();
-        client.test();
+        while (true) {
+            try {
+                LotusClient client = new LotusClient();
+                client.run();
+            } catch (Exception e) {
+                System.out.println("LotusClient crashed! Restarting...");
+            }
+        }
     }
 }
