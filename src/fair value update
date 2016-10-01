@@ -1,0 +1,22 @@
+	public void getAverageFairValue(ArrayList<Integer>allBuyOrders, ArrayList<Integer> allSellOrders)
+	{
+		Iterator<Integer> it = allBuyOrders.iterator();
+		int upperLimit = Integer.MIN_VALUE;
+		while(it.hasNext())
+		{
+			int x = it.next();
+			if (x>upperLimit)
+			upperLimit = x;
+		}
+		Iterator<Integer> it2 = allSellOrders.iterator();
+		int lowerLimit = Integer.MAX_VALUE;
+		while(it2.hasNext())
+		{
+			int x = it2.next();
+			if (x<lowerLimit)
+			lowerLimit = x;
+		}
+		int AverageFairValue = (lowerLimit + upperLimit)/2;
+		marketVal = AverageFairValue;
+	}
+	
