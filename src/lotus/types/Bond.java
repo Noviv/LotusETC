@@ -1,9 +1,11 @@
 package lotus.types;
 
 import lotus.LotusClient;
+import lotus.Stocks;
 import lotus.util.DirType;
 
 import static lotus.algo.BondAlgo.*;
+import lotus.algo.NonBondAlgo;
 
 public class Bond extends Symbol {
 
@@ -33,6 +35,11 @@ public class Bond extends Symbol {
                 client.add(this, DirType.SELL, getSellVal(), 1);
             }
         }
+    }
+
+    @Override
+    public void updateAverages0() {
+        //don't update bond average
     }
 
     public static Bond getInstance() {

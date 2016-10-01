@@ -3,6 +3,7 @@ package lotus.types;
 import java.util.ArrayList;
 import java.util.TreeMap;
 import lotus.LotusClient;
+import lotus.algo.NonBondAlgo;
 import lotus.util.LotusUtil;
 
 public abstract class Symbol {
@@ -87,6 +88,13 @@ public abstract class Symbol {
         tradeBuyPairs.clear();
         tradeSellPairs.clear();
     }
+
+    public void updateAverages() {
+        NonBondAlgo.getAverageFairValue(getCurrentBuyPrices(), getCurrentSellPrices());
+        updateAverages0();
+    }
+
+    protected abstract void updateAverages0();
 
     public abstract void calc(LotusClient client);
 

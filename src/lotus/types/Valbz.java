@@ -1,6 +1,8 @@
 package lotus.types;
 
 import lotus.LotusClient;
+import lotus.Stocks;
+import lotus.algo.NonBondAlgo;
 
 import lotus.util.DirType;
 
@@ -28,6 +30,11 @@ public class Valbz extends Symbol {
                 client.add(this, DirType.SELL, getSellVal(), 1);
             }
         }
+    }
+
+    @Override
+    public void updateAverages0() {
+        Stocks.setVALBZ(NonBondAlgo.getMarketVal());
     }
 
     public static Valbz getInstance() {

@@ -5,6 +5,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
+import lotus.algo.NonBondAlgo;
 import lotus.types.Bond;
 import lotus.types.Symbol;
 import lotus.types.Valbz;
@@ -60,6 +61,11 @@ public class LotusClient {
             String line = null;
             try {
                 line = from_exch.readLine().trim();
+
+                for (Symbol s : activeSymbols) {
+                    s.updateAverages();
+                }
+
                 process(line);
             } catch (Exception e) {
                 System.err.println("Error in LotusClient.run: " + e.getMessage());

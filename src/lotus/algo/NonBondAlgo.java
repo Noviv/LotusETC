@@ -138,7 +138,7 @@ public class NonBondAlgo {
         return lowestSellVal;
     }
 
-    public static int returnMarketVal() {
+    public static int getMarketVal() {
         return marketVal;
     }
 
