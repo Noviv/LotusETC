@@ -1,0 +1,23 @@
+  //note that 
+  public boolean worthItToConvertXLF()
+  {
+    int totVal = 0;
+      totVal = 30*BONDPRICE+ 20GSprice + 30*MSprice + 20*WFCprice + XLFfee;  //GET bond price, GS price, MS price, WFC price
+      if (totVal<this.XLFprice)																		//add 100- XLF fee is 100 
+      {
+        return true;                                  //IF TRUE, BUY 30 OF BOND, 20 OF GS, 30 OF MS, 20 OF WFC, CONVERT, SELL XLF
+      }                                                //IF FALSE, BUY XLF, CONVERT BACK, SELL SEPARATELY
+    return false;
+  }
+  public boolean worthItToConvertVALE()
+  {
+    int totVal = 0;
+      totVal =VALBZprice+VALBZfee;		//get VALBZ price and VALE price
+      if(totVal<VALEprice)            //VALBZ fee is 10
+      {
+        return true;                  
+      }
+    return false;                 //IF IT RETURNS TRUE, BUY VALE CONVERT TO VALBZ, SELL VALBZ, FALSE, BUY VALBZ, CONVERT SELL VALE
+  }
+  
+                
