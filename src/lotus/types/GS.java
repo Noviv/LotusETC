@@ -1,10 +1,8 @@
 package lotus.types;
 
-import lotus.LotusClient;
 import lotus.Stocks;
 
 import static lotus.algo.NonBondAlgo.*;
-import lotus.util.DirType;
 
 public class GS extends Symbol {
 

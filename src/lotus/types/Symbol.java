@@ -19,6 +19,8 @@ public abstract class Symbol {
 
     protected boolean traded;
     protected long lastMillis;
+    
+    protected boolean holding;
 
     protected Symbol(String symb) {
         symbol = symb;
@@ -29,6 +31,8 @@ public abstract class Symbol {
 
         traded = false;
         lastMillis = System.currentTimeMillis();
+        
+        holding = false;
     }
 
     public void appendBook(String[] comps) {
@@ -109,6 +113,8 @@ public abstract class Symbol {
             findHighestBid(getCurrentBuyPrices());
             if (checkingForBuyPrice()) {
                 client.add(this, DirType.BUY, getBuyVal(), 1);
+                getAverageFairValue(getCurrentBuyPrices(), getCurrentSellPrices());
+                client.add(this, DirType.SELL, getMarketVal() + 3, 1);
             }
 
             findLowestBid(getCurrentSellPrices());
