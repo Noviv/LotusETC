@@ -1,11 +1,9 @@
 package lotus.types;
 
 import lotus.LotusClient;
-import lotus.Stocks;
 import lotus.util.DirType;
 
 import static lotus.algo.BondAlgo.*;
-import lotus.algo.NonBondAlgo;
 
 public class Bond extends Symbol {
 
