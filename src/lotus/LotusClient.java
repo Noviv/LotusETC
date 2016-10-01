@@ -14,9 +14,9 @@ import lotus.util.LotusUtil;
 public class LotusClient {
 
     //networking variables
-    private Socket exch;
-    private BufferedReader from_exch;
-    private PrintWriter to_exch;
+    private final Socket exch;
+    private final BufferedReader from_exch;
+    private final PrintWriter to_exch;
 
     //market data
     private final ArrayList<Symbol> activeSymbols;
