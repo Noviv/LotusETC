@@ -1,0 +1,83 @@
+import java.util.ArrayList;
+import java.util.Iterator;
+
+public class ETCalgoNotBond 
+{
+	public boolean BuyOrderCheck(ArrayList<Integer>allBuyOrders)
+	{
+		Iterator<Integer> it = allBuyOrders.iterator();
+		Iterator<Integer> it2 = allBuyOrders.iterator();
+		double total = 0;
+		double counter = 0;
+		while(it.hasNext())
+		{
+			counter++;
+			int curVal = it.next();
+			total = total + curVal;
+			
+		}
+		double average = total/counter;
+		while(it2.hasNext())
+		{
+			int curVal = it.next();
+			if (Math.abs(average-curVal)>=20)
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	public boolean SellOrderCheck(ArrayList<Integer>allSellOrders)
+	{
+		Iterator<Integer> it = allSellOrders.iterator();
+		Iterator<Integer> it2 = allSellOrders.iterator();
+		double total = 0;
+		double counter = 0;
+		while(it.hasNext())
+		{
+			counter++;
+			int curVal = it.next();
+			total = total + curVal;
+			
+		}
+		double average = total/counter;
+		while(it2.hasNext())
+		{
+			int curVal = it.next();
+			if (Math.abs(average-curVal)>=20)
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+	public int getAverageFairValue(ArrayList<Integer>allBuyOrders, ArrayList<Integer> allSellOrders)
+	{
+		Iterator<Integer> it = allBuyOrders.iterator();
+		double total = 0;
+		double counter = 0;
+		while(it.hasNext())
+		{
+			counter++;
+			int curVal = it.next();
+			total = total + curVal;
+			
+		}
+		double average = total/counter;	
+		
+		Iterator<Integer> it2 = allSellOrders.iterator();
+		double total1 = 0;
+		double counter1 = 0;
+		while(it2.hasNext())
+		{
+			counter1++;
+			int curVal = it.next();
+			total1 = total1 + curVal;
+			
+		}
+		double average1 = total1/counter1;
+		int AverageFairValue = (int)(average+average1)/2;
+		return AverageFairValue;
+	}
+}

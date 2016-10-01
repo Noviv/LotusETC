@@ -1,0 +1,8 @@
+if (buyOrderCheck(BuyOrders) == true || SellOrderCheck(SellOrders) == true)
+{
+  getAverageFairValue(BuyOrders,SellOrders);
+  ---->continue with how the BOND was implemented i.e. use same methods
+ }
+ 
+ 
+ NOTE: BUYORDER/SELLORDERS ARE THE ARRAYLISTS OF THE LAST 15 ORDERS
