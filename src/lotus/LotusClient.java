@@ -5,10 +5,14 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
-import lotus.algo.NonBondAlgo;
 import lotus.types.Bond;
+import lotus.types.GS;
+import lotus.types.MS;
 import lotus.types.Symbol;
 import lotus.types.Valbz;
+import lotus.types.Vale;
+import lotus.types.WFC;
+import lotus.types.XLF;
 import lotus.util.DirType;
 import lotus.util.LotusUtil;
 
@@ -33,6 +37,11 @@ public class LotusClient {
         activeSymbols = new ArrayList<>();
         activeSymbols.add(Bond.getInstance());
         activeSymbols.add(Valbz.getInstance());
+        activeSymbols.add(Vale.getInstance());
+        activeSymbols.add(GS.getInstance());
+        activeSymbols.add(MS.getInstance());
+        activeSymbols.add(WFC.getInstance());
+        activeSymbols.add(XLF.getInstance());
 
         command("HELLO", "LOTUS");
     }
@@ -58,7 +67,7 @@ public class LotusClient {
 
     public final void run() {
         while (true) {
-            String line = null;
+            String line;
             try {
                 line = from_exch.readLine().trim();
 
@@ -81,7 +90,7 @@ public class LotusClient {
     private void process(String line) {
         String[] comps = line.split(" ");
 
-        Symbol s;
+        Symbol s = null;
         boolean book;
 
         switch (comps[0]) {
@@ -95,17 +104,11 @@ public class LotusClient {
                 return;
         }
 
-        switch (comps[1]) {
-            case "BOND":
-                s = Bond.getInstance();
-                break;
-            case "VALBZ":
-                s = Valbz.getInstance();
-                break;
-            default:
-                s = null;
+        for (Symbol scheck : activeSymbols) {
+            if (comps[1].equals(scheck.getSymbol())) {
+                s = scheck;
+            }
         }
-
         if (s == null) {
             return;
         }

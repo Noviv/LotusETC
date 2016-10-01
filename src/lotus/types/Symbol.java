@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.TreeMap;
 import lotus.LotusClient;
 import lotus.algo.NonBondAlgo;
+import static lotus.algo.NonBondAlgo.*;
+import lotus.util.DirType;
 import lotus.util.LotusUtil;
 
 public abstract class Symbol {
@@ -16,6 +18,7 @@ public abstract class Symbol {
     private TreeMap<Integer, Integer> tradeBuyPairs;
 
     protected boolean traded;
+    protected long lastMillis;
 
     protected Symbol(String symb) {
         symbol = symb;
@@ -25,6 +28,7 @@ public abstract class Symbol {
         tradeBuyPairs = new TreeMap<>();
 
         traded = false;
+        lastMillis = System.currentTimeMillis();
     }
 
     public void appendBook(String[] comps) {
@@ -96,7 +100,23 @@ public abstract class Symbol {
 
     protected abstract void updateAverages0();
 
-    public abstract void calc(LotusClient client);
+    public void calc(LotusClient client) {
+        if (System.currentTimeMillis() - lastMillis > 5 * 1000 && traded) {
+            traded = false;
+            lastMillis = System.currentTimeMillis();
+
+            getAverageFairValue(getCurrentBuyPrices(), getCurrentSellPrices());
+            findHighestBid(getCurrentBuyPrices());
+            if (checkingForBuyPrice()) {
+                client.add(this, DirType.BUY, getBuyVal(), 1);
+            }
+
+            findLowestBid(getCurrentSellPrices());
+            if (checkingForSellPrice()) {
+                client.add(this, DirType.SELL, getSellVal(), 1);
+            }
+        }
+    }
 
     public final String getSymbol() {
         return symbol;

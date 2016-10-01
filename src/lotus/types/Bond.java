@@ -9,12 +9,8 @@ public class Bond extends Symbol {
 
     private static Bond instance;
 
-    private long lastMillis;
-
     public Bond() {
         super("BOND");
-
-        lastMillis = System.currentTimeMillis();
     }
 
     @Override
