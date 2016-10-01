@@ -85,27 +85,21 @@ public class Stocks
   public boolean worthItToConvertXLF()
   {
     int totVal = 0;
-    if (this.getBONDamt()>=30&&this.getGSamt()>=20&&this.getMSamt()>=30 && this.getWFCamt()>=20)
-    {
       totVal = 30*this.BONDPRICE + 20*this.GSprice + 30*this.MSprice + 20*this.WFCprice + XLFfee;
       if (totVal<this.XLFprice)
       {
         return true;
       }
-    }
     return false;
   }
   public boolean worthItToConvertVALE()
   {
     int totVal = 0;
-    if(this.getVALBZamt()>=0||this.getVALEamt()>=0)
-    {
       totVal =this.VALBZprice+VALBZfee;
       if(totVal<VALEprice)
       {
         return true;
       }
-    }
     return false;
   }
 }
