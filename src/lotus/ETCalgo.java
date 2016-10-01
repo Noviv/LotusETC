@@ -1,14 +1,17 @@
-public class ETCalgo()
+import java.util.ArrayList;
+import java.util.Iterator;
+
+public class ETCalgo
 {
 
-public int lowestSellVal;
-public int highestBuyVal;
-public final int marketVal;
+public static int lowestSellVal;
+public static int highestBuyVal;
+public static int marketVal;
 
 
 public int getBuyVal()
 {
-  reutrn highestBuyVal;
+  return highestBuyVal;
 }
 public int getSellVal()
 {
@@ -23,7 +26,7 @@ public void getMarketVal(int value)
 }
 public int returnMarketVal()
 {
-  returnMarketVal();
+  return marketVal;
 }
 
 //algorithm for checking for the lowest sell bid currently
@@ -31,7 +34,7 @@ public int returnMarketVal()
 //post return the price at which to sell at
   public void findLowestBid(ArrayList<Integer> currentListofSellOrders)
 {
-  Iterator(Integer) it = currentListofSellOrders.iterator();
+  Iterator<Integer> it = currentListofSellOrders.iterator();
   int minVal = Integer.MAX_VALUE;
   while(it.hasNext())
   {
@@ -51,7 +54,7 @@ public int returnMarketVal()
 //post return the price at which to buy at
   public void findHighestBid(ArrayList<Integer> currentListofBuyOrders)
   {
-  Iterator(Integer) it = currentListofBuyOrders.iterator();
+  Iterator<Integer> it = currentListofBuyOrders.iterator();
   int maxVal = Integer.MIN_VALUE;
   while(it.hasNext())
   {
