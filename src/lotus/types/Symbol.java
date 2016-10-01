@@ -47,7 +47,7 @@ public abstract class Symbol {
 
     public void appendTrade(String _price, String _qty) {
         traded = true;
-        
+
         int price = Integer.parseInt(_price);
         int qty = Integer.parseInt(_qty);
         for (int cprice : bookSellPairs.keySet()) {

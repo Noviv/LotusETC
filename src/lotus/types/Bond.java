@@ -1,21 +1,19 @@
 package lotus.types;
 
 import lotus.LotusClient;
-import lotus.algo.BondAlgo;
 import lotus.util.DirType;
+
+import static lotus.algo.BondAlgo.*;
 
 public class Bond extends Symbol {
 
     private static Bond instance;
-
-    private BondAlgo algo;
 
     private long lastMillis;
 
     public Bond() {
         super("BOND");
 
-        algo = new BondAlgo();
         lastMillis = System.currentTimeMillis();
     }
 
@@ -25,17 +23,14 @@ public class Bond extends Symbol {
             traded = false;
             lastMillis = System.currentTimeMillis();
 
-            System.out.println("RUNNING ALGORITHM");
-            algo.findHighestBid(getCurrentBuyPrices());
-            if (algo.checkingForBuyPrice()) {
-                System.out.println("BUY @ " + algo.getBuyVal());
-                client.add(this, DirType.BUY, algo.getBuyVal(), 1);
+            findHighestBid(getCurrentBuyPrices());
+            if (checkingForBuyPrice()) {
+                client.add(this, DirType.BUY, getBuyVal(), 1);
             }
 
-            algo.findLowestBid(getCurrentSellPrices());
-            if (algo.checkingForSellPrice()) {
-                System.out.println("SELL @ " + algo.getSellVal());
-                client.add(this, DirType.SELL, algo.getSellVal(), 1);
+            findLowestBid(getCurrentSellPrices());
+            if (checkingForSellPrice()) {
+                client.add(this, DirType.SELL, getSellVal(), 1);
             }
         }
     }

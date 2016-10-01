@@ -1,12 +1,13 @@
 package lotus;
 
-import lotus.algo.BondAlgo;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
 import lotus.types.Bond;
 import lotus.types.Symbol;
+import lotus.types.Valbz;
 import lotus.util.DirType;
 import lotus.util.LotusUtil;
 
@@ -19,9 +20,7 @@ public class LotusClient {
 
     //market data
     private int orderID;
-    private Bond bondData;
-
-    private BondAlgo algo;
+    private ArrayList<Symbol> activeSymbols;
 
     public LotusClient() throws Exception {
         exch = new Socket("test-exch-lotus", 20000);
@@ -30,8 +29,8 @@ public class LotusClient {
         to_exch = new PrintWriter(exch.getOutputStream(), true);
 
         orderID = 0;
-        bondData = Bond.getInstance();
-        algo = new BondAlgo();
+        activeSymbols = new ArrayList<>();
+        activeSymbols.add(Bond.getInstance());
 
         command("HELLO", "LOTUS");
     }
@@ -57,26 +56,47 @@ public class LotusClient {
 
     public final void run() {
         try {
-            String line;
-            String[] comps;
             while (true) {
-                line = from_exch.readLine().trim();
-                comps = line.split(" ");
-                if (comps[1].equals("BOND")) {
-                    switch (comps[0]) {
-                        case "BOOK":
-                            bondData.appendBook(comps);
-                            break;
-                        case "TRADE":
-                            bondData.appendTrade(comps[2], comps[3]);
-                            break;
-                    }
-                }
+                process(from_exch.readLine().trim());
 
-                bondData.calc(this);
+                for (Symbol s : activeSymbols) {
+                    s.calc(this);
+                }
             }
         } catch (Exception e) {
             System.out.println("Error in LotusClient.run: " + e.getMessage());
+        }
+    }
+
+    private void process(String line) {
+        String[] comps = line.split(" ");
+
+        Symbol s = null;
+        boolean book = false;
+
+        if (comps[1].equals("BOND")) {
+            s = Bond.getInstance();
+        } else if (comps[1].equals("VALBZ")) {
+            s = Valbz.getInstance();
+        }
+
+        switch (comps[0]) {
+            case "BOOK":
+                Bond.getInstance().appendBook(comps);
+                break;
+            case "TRADE":
+                Bond.getInstance().appendTrade(comps[2], comps[3]);
+                break;
+        }
+
+        process0(s, book, comps);
+    }
+
+    private void process0(Symbol s, boolean book, String[] comps) {
+        if (book) {
+            s.appendBook(comps);
+        } else {
+            s.appendTrade(comps[2], comps[3]);
         }
     }
 
