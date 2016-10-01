@@ -1,6 +1,0 @@
-
-if (if findLowestBid(INPUT ArrayList HERE).checkingforSellPrice() == true) &&
-    findHighestBid(INPUT ArrayList HERE).checkingforBuyPrice() == true)
-{
-  //print out buy THIS THING at highestBuyVal (INSTANCE VARUABLE FOR THE ETCALGO class)
-}

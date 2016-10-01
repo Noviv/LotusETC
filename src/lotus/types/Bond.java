@@ -1,80 +1,43 @@
 package lotus.types;
 
-import java.util.ArrayList;
-import java.util.TreeMap;
-import lotus.LotusUtil;
+import lotus.LotusClient;
+import lotus.algo.BondAlgo;
+import lotus.util.DirType;
 
-public class Bond {
+public class Bond extends Symbol {
 
     private static Bond instance;
 
-    private TreeMap<Integer, Integer> bookSellPairs;
-    private TreeMap<Integer, Integer> bookBuyPairs;
-    private TreeMap<Integer, Integer> tradeSellPairs;
-    private TreeMap<Integer, Integer> tradeBuyPairs;
+    private BondAlgo algo;
 
-    private Bond() {
-        bookSellPairs = new TreeMap<>();
-        bookBuyPairs = new TreeMap<>();
-        tradeSellPairs = new TreeMap<>();
-        tradeBuyPairs = new TreeMap<>();
+    private long lastMillis;
+
+    public Bond() {
+        super("BOND");
+
+        algo = new BondAlgo();
+        lastMillis = System.currentTimeMillis();
     }
 
-    public void appendBook(String[] comps) {
-        boolean buyOrder = true;
-        String[] pricePair;
-        for (int i = 2; i < comps.length; i++) {
-            if (comps[i].equals("BUY")) {
-                buyOrder = true;
-            } else if (comps[i].equals("SELL")) {
-                buyOrder = false;
-            } else {
-                pricePair = comps[i].split(":");
-                if (buyOrder) {
-                    bookBuyPairs.put(Integer.parseInt(pricePair[0]), Integer.parseInt(pricePair[1]));
-                } else {
-                    bookSellPairs.put(Integer.parseInt(pricePair[0]), Integer.parseInt(pricePair[1]));
-                }
+    @Override
+    public void calc(LotusClient client) {
+        if (System.currentTimeMillis() - lastMillis > 5 * 1000 && traded) {
+            traded = false;
+            lastMillis = System.currentTimeMillis();
+
+            System.out.println("RUNNING ALGORITHM");
+            algo.findHighestBid(getCurrentBuyPrices());
+            if (algo.checkingForBuyPrice()) {
+                System.out.println("BUY @ " + algo.getBuyVal());
+                client.add(this, DirType.BUY, algo.getBuyVal(), 1);
+            }
+
+            algo.findLowestBid(getCurrentSellPrices());
+            if (algo.checkingForSellPrice()) {
+                System.out.println("SELL @ " + algo.getSellVal());
+                client.add(this, DirType.SELL, algo.getSellVal(), 1);
             }
         }
-    }
-
-    public void appendTrade(String _price, String _qty) {
-        int price = Integer.parseInt(_price);
-        int qty = Integer.parseInt(_qty);
-        for (int cprice : bookSellPairs.keySet()) {
-            if (cprice == price) {
-                tradeSellPairs.put(price, qty);
-                return;
-            }
-        }
-
-        for (int i : bookBuyPairs.keySet()) {
-            if (i == price) {
-                tradeBuyPairs.put(price, qty);
-                return;
-            }
-        }
-    }
-
-    public ArrayList<Integer> getCurrentSellPrices() {
-        return LotusUtil.cvtMapToKeyArray(tradeSellPairs);
-    }
-
-    public ArrayList<Integer> getCurrentBuyPrices() {
-        return LotusUtil.cvtMapToKeyArray(tradeBuyPairs);
-    }
-
-    public void print() {
-        for (int i : tradeSellPairs.keySet()) {
-            System.out.println("sell " + i + " @ " + tradeSellPairs.get(i));
-        }
-
-        for (int i : tradeBuyPairs.keySet()) {
-            System.out.println("buy " + i + " @ " + tradeBuyPairs.get(i));
-        }
-        tradeBuyPairs.clear();
-        tradeSellPairs.clear();
     }
 
     public static Bond getInstance() {
