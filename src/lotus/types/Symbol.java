@@ -19,7 +19,7 @@ public abstract class Symbol {
 
     protected boolean traded;
     protected long lastMillis;
-    
+
     protected boolean holding;
 
     protected Symbol(String symb) {
@@ -31,7 +31,7 @@ public abstract class Symbol {
 
         traded = false;
         lastMillis = System.currentTimeMillis();
-        
+
         holding = false;
     }
 
@@ -111,16 +111,16 @@ public abstract class Symbol {
 
             getAverageFairValue(getCurrentBuyPrices(), getCurrentSellPrices());
             findHighestBid(getCurrentBuyPrices());
-            if (checkingForBuyPrice()) {
-                client.add(this, DirType.BUY, getBuyVal(), 1);
-                getAverageFairValue(getCurrentBuyPrices(), getCurrentSellPrices());
-                client.add(this, DirType.SELL, getMarketVal() + 3, 1);
+            findLowestBid(getCurrentSellPrices());
+            if (checkingForBuyPrice() && checkingForSellPrice()) {
+                client.add(this, DirType.BUY, getBuyVal() + 3, 1);
+                client.add(this, DirType.SELL, getSellVal() - 1, 1);
             }
 
-            findLowestBid(getCurrentSellPrices());
-            if (checkingForSellPrice()) {
-                client.add(this, DirType.SELL, getSellVal(), 1);
-            }
+//            findLowestBid(getCurrentSellPrices());
+//            if (checkingForSellPrice()) {
+//                client.add(this, DirType.SELL, getSellVal(), 1);
+//            }
         }
     }
 

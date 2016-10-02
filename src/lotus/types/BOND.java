@@ -5,11 +5,11 @@ import lotus.util.DirType;
 
 import static lotus.algo.BondAlgo.*;
 
-public class Bond extends Symbol {
+public class BOND extends Symbol {
 
-    private static Bond instance;
+    private static BOND instance;
 
-    public Bond() {
+    public BOND() {
         super("BOND");
     }
 
@@ -36,7 +36,7 @@ public class Bond extends Symbol {
         //don't update bond average
     }
 
-    public static Bond getInstance() {
-        return instance == null ? instance = new Bond() : instance;
+    public static BOND getInstance() {
+        return instance == null ? instance = new BOND() : instance;
     }
 }

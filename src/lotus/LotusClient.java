@@ -5,7 +5,8 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
-import lotus.types.Bond;
+import java.util.HashMap;
+import lotus.types.BOND;
 import lotus.types.GS;
 import lotus.types.MS;
 import lotus.types.Symbol;
@@ -26,22 +27,32 @@ public class LotusClient {
     //market data
     private final ArrayList<Symbol> activeSymbols;
     private int orderID;
+    private final HashMap<String, Integer> inventory;
 
     public LotusClient() throws Exception {
         exch = new Socket("test-exch-lotus", 20000);
 //        exch = new Socket("production", 20000);
         from_exch = new BufferedReader(new InputStreamReader(exch.getInputStream()));
         to_exch = new PrintWriter(exch.getOutputStream(), true);
+        inventory = new HashMap<String, Integer>();
+        inventory.put("BOND", 0);
+        inventory.put("VALBZ", 0);
+        inventory.put("VALBZ", 0);
+        inventory.put("VALE", 0);
+        inventory.put("GS", 0);
+        inventory.put("MS", 0);
+        inventory.put("WFC", 0);
+        inventory.put("XLF", 0);
 
         orderID = 0;
         activeSymbols = new ArrayList<>();
-        activeSymbols.add(Bond.getInstance());
+        activeSymbols.add(BOND.getInstance());
         activeSymbols.add(VALBZ.getInstance());
-        activeSymbols.add(VALE.getInstance());
+//        activeSymbols.add(VALE.getInstance());
         activeSymbols.add(GS.getInstance());
         activeSymbols.add(MS.getInstance());
         activeSymbols.add(WFC.getInstance());
-        activeSymbols.add(XLF.getInstance());
+//        activeSymbols.add(XLF.getInstance());
 
         command("HELLO", "LOTUS");
     }
@@ -49,6 +60,11 @@ public class LotusClient {
     public final void add(Symbol symb, DirType dir, int price, int size) {
         orderID++;
         command("ADD", orderID, symb.getSymbol(), dir, price, size);
+    }
+
+    public final void convert(Symbol symb, DirType dir, int size) {
+        orderID++;
+        command("CONVERT", orderID, symb.getSymbol(), size);
     }
 
     public final void command(Object... cmdComps) {
